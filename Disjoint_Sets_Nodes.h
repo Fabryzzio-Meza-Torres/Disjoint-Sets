@@ -1,69 +1,103 @@
 #include <iostream>
-#include <unordered_map>
-
-template <typename T>
-struct Node
-{
-    Node<T> *parent;
-    int rank_;
-    T data;
-
-    Node() : parent(nullptr), rank_(0), data(T()) {}
-    Node(T value) : parent(nullptr), rank_(0), data(value) {}
-    Node(T value, int height) : parent(nullptr), rank_(height), data(value) {}
-    Node(T value, int height, Node<T> *father) : parent(father), rank_(height), data(value) {}
-};
+#include <vector>
 
 template <typename T>
 class DisjointSet
 {
+    struct Node
+    {
+        int parent;
+        int rank_;
+        T data;
+        int size;
+        Node() : data(), parent(), rank_(), size() {}
+    };
+    Node *nodes = nullptr;
+    int sets_{};
+    int elements{};
+
 public:
-    ~DisjointSet();
-
-    void MakeSet(Node<T> *x)
+    DisjointSet(std::vector<T> values)
     {
-        x->parent = x;
+        nodes = new Node[values.size()];
+        for (int i = 0; i < values.size(); i++)
+        {
+            MakeSet(i);
+            nodes[i].data = values[i];
+        }
+        sets_ = values.size();
+        elements = values.size();
+    }
+    ~DisjointSet()
+    {
+        delete[] nodes;
     }
 
-    Node<T> *Find(Node<T> *temp)
+    void MakeSet(int x)
     {
-        if (temp->parent != temp)
-        {
-            temp->parent = Find(temp->parent);
-        }
-        return temp->parent;
+        nodes[x].parent = x;
+        nodes[x].rank_ = 0;
+        nodes[x].size = 1;
+        sets_++;
+        elements++;
     }
 
-    void Union(Node<T> *x, Node<T> *y)
+    int FindPathCompression(int x)
     {
-        if (x == nullptr || y == nullptr)
+        if (x < 0)
         {
-            return;
+            throw std::out_of_range("Index out of bounds");
         }
+        if (nodes[x].parent != x)
+        {
+            nodes[x].parent = FindPathCompression(nodes[x].parent);
+        }
+        return nodes[x].parent;
+    }
 
-        Node<T> *rootx = Find(x);
-        Node<T> *rooty = Find(y);
+    void Union(int x, int y)
+    {
+
+        int rootx = FindPathCompression(x);
+        int rooty = FindPathCompression(y);
 
         if (rootx != rooty)
         {
-            if (rootx->rank_ < rooty->rank_)
+            if (nodes[rootx].rank_ < nodes[rooty].rank_)
             {
-                rootx->parent = rooty;
+                nodes[rootx].parent = rooty;
+                nodes[rooty].size += nodes[rootx].size;
             }
-            else if (rootx->rank_ > rooty->rank_)
+            else if (nodes[rootx].rank_ > nodes[rooty].rank_)
             {
-                rooty->parent = rootx;
+                nodes[rooty].parent = rootx;
+                nodes[rootx].size += nodes[rooty].size;
             }
             else
             {
-                rooty->parent = rootx;
-                rootx->rank_++;
+                nodes[rooty].parent = rootx;
+                nodes[rootx].size += nodes[rooty].size;
+                nodes[rooty].rank_++;
             }
         }
+        else
+        {
+            return;
+        }
+        --sets_;
     }
 
-    bool IsConnected(Node<T> *x, Node<T> *y)
+    bool IsConnected(int x, int y)
     {
-        return Find(x) == Find(y);
+        return (FindPathCompression(x) == FindPathCompression(y)) ? true : false;
+    }
+    int size()
+    {
+        return elements;
+    }
+
+    int sets()
+    {
+        return sets_;
     }
 };

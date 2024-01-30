@@ -1,44 +1,25 @@
 #include <iostream>
-#include <unordered_map>
+#include <vector>
 #include "Disjoint_Sets_Nodes.h"
+#include <ios>
 using namespace std;
 
 int main()
 {
-    DisjointSet<int> dsu; // Create a DisjoinSet object to manage integers
+    // Example usage of DisjointSet
+    vector<int> values = {0, 1, 2, 3, 4, 5};
+    DisjointSet<int> disjointSet(values);
 
-    // Example usage:
-    // Create some nodes
-    Node<int> *node1 = new Node<int>(10);
-    Node<int> *node2 = new Node<int>(20);
-    Node<int> *node3 = new Node<int>(30);
+    disjointSet.Union(0, 1);
+    disjointSet.Union(2, 3);
+    disjointSet.Union(4, 5);
+    disjointSet.Union(1, 3);
 
-    // Make sets for the nodes
-    dsu.MakeSet(node1);
-    dsu.MakeSet(node2);
-    dsu.MakeSet(node3);
+    cout << "Number of sets: " << disjointSet.sets() << endl;
+    cout << "Size of the disjoint set: " << disjointSet.size() << endl;
 
-    // Perform operations on the nodes
-    dsu.Union(node1, node2); // Union node1 and node2
-
-    // Check connectivity
-    if (dsu.IsConnected(node1, node2))
-    {
-        cout << "node1 and node2 are connected\n";
-    }
-    else
-    {
-        cout << "node1 and node2 are not connected\n";
-    }
-
-    if (dsu.IsConnected(node1, node3))
-    {
-        cout << "node1 and node3 are connected\n";
-    }
-    else
-    {
-        cout << "node1 and node3 are not connected\n";
-    }
+    cout << "Is 0 connected to 2? " << boolalpha << disjointSet.IsConnected(0, 2) << endl;
+    cout << "Is 1 connected to 4? " << boolalpha << disjointSet.IsConnected(1, 4) << endl;
 
     return 0;
 }
