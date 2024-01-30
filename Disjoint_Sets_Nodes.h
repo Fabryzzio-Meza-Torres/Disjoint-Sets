@@ -1,72 +1,69 @@
 #include <iostream>
 #include <unordered_map>
-using namespace std;
 
 template <typename T>
 struct Node
 {
-    Node *parent;
-    int rank;
+    Node<T> *parent;
+    int rank_;
     T data;
-    Node() : parent(nullptr), rank(0), data(T()) {}
-    Node(T value) : parent(nullptr), rank(0), data(value) {}
-    Node(T value, int height) : parent(nullptr), rank(height), data(value) {}
-    Node(T value, int height, Node *father) : parent(father), rank(height), data(value) {}
+
+    Node() : parent(nullptr), rank_(0), data(T()) {}
+    Node(T value) : parent(nullptr), rank_(0), data(value) {}
+    Node(T value, int height) : parent(nullptr), rank_(height), data(value) {}
+    Node(T value, int height, Node<T> *father) : parent(father), rank_(height), data(value) {}
 };
 
 template <typename T>
-class DisjoinSet
+class DisjointSet
 {
-private:
-    unordered_map<T, Node> nodes;
-
 public:
-    ~DisjoinSet();
-    void MakeSet(T x)
+    ~DisjointSet();
+
+    void MakeSet(Node<T> *x)
     {
-        Node *newNode = Node(x);
-        newNode->parent = newNode;
-        nodes[x] = newNode;
+        x->parent = x;
     }
 
-    Node *Find(Node *temp)
+    Node<T> *Find(Node<T> *temp)
     {
         if (temp->parent != temp)
         {
-            temp->parent = find(temp->parent);
+            temp->parent = Find(temp->parent);
         }
         return temp->parent;
     }
-    void Union(Node *x, Node *y)
+
+    void Union(Node<T> *x, Node<T> *y)
     {
-        if (x || y == nullptr)
+        if (x == nullptr || y == nullptr)
         {
             return;
         }
-        Node *rootx = find(x);
-        Node *rooty = find(y);
+
+        Node<T> *rootx = Find(x);
+        Node<T> *rooty = Find(y);
 
         if (rootx != rooty)
         {
-            if (rootx->rank < rooty->rank)
+            if (rootx->rank_ < rooty->rank_)
             {
                 rootx->parent = rooty;
             }
-            else if (rootx->rank > rooty->rank)
+            else if (rootx->rank_ > rooty->rank_)
             {
                 rooty->parent = rootx;
             }
-            else if (rootx->rank == rooty->rank)
+            else
             {
                 rooty->parent = rootx;
-                rootx->rank++
+                rootx->rank_++;
             }
         }
     }
-    bool isConnected(Node *x, Node *y)
+
+    bool IsConnected(Node<T> *x, Node<T> *y)
     {
-        Node *temp = find(x);
-        Node *temp2 = find(y);
-        return (temp == temp2) ? true : false;
+        return Find(x) == Find(y);
     }
 };
