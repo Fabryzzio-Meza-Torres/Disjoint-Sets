@@ -4,4 +4,5 @@ Implementation of Disjoint Set data structure.
 - Fabryzzio Jossue Meza Torres
 - Fernando Alonso Usurin Arias
 - Yoselyn Victoria Miranda Chirinos
+
 ![](conjuntos.png)
