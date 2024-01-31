@@ -101,3 +101,16 @@ public:
         return sets_;
     }
 };
+template<typename T>
+class DisjointSetTree: public DisjointSet<T>{
+private:
+public:
+    DisjointSetTree(T* data, int n);
+};
+template<typename T>
+class DisjointSetArray: public DisjointSet<T>{
+private:
+
+public:
+    DisjointSetArray(T* data,int n);
+};
