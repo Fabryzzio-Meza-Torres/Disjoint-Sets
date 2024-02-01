@@ -1,5 +1,7 @@
 #include <iostream>
 #include <vector>
+#include <unordered_map>
+using namespace std;
 
 template <typename T>
 class DisjointSet
@@ -137,8 +139,45 @@ public:
         return DisjointSet<T>::size();
     }
 
+
     int sets()
     {
         return DisjointSet<T>::sets();
+    }
+};
+template <typename T>
+class DisjointSetTree : public DisjointSet<T> {
+private:
+    unordered_map<T, T> parent;
+
+public:
+    DisjointSetTree(T *data, int n) : DisjointSet<T>(std::vector<T>(data, data + n)) {
+        for (int i = 0; i < n; ++i) {
+            MakeSet(data[i]);
+        }
+    }
+
+    void MakeSet(T x) {
+        parent[x] = x;
+    }
+
+    T Find(T x) {
+        if (parent[x] != x) {
+            parent[x] = this->FindPathCompression(parent[x]);
+        }
+        return parent[x];
+    }
+
+    void Union(T x, T y) {
+        T rootX = Find(x);
+        T rootY = Find(y);
+
+        if (rootX != rootY) {
+            parent[rootX] = rootY;
+        }
+    }
+
+    bool IsConnected(T x, T y) {
+        return Find(x) == Find(y);
     }
 };
