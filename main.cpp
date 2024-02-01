@@ -35,5 +35,16 @@ int main()
 
     cout << "Is 0 connected to 3? " << boolalpha << disjointSetArray.IsConnected(0, 3) << endl;
     cout << "Is 0 connected to 4? " << boolalpha << disjointSetArray.IsConnected(0,4) << endl;
+
+    int dato1[] = {1, 2, 3, 4, 5};
+    int n1 = sizeof(dato1) / sizeof(dato1[0]);
+
+    DisjointSetTree<int> disjointSetTree(dato1, n1);
+
+    disjointSetTree.Union(1, 2);
+    disjointSetTree.Union(3, 4);
+
+    cout << "Is 1 connected to 2? " << boolalpha <<  disjointSetTree.IsConnected(1, 2) << endl;
+    cout << "Is 1 connected to 3? " << disjointSetTree.IsConnected(1, 3) << endl;
     return 0;
 }
