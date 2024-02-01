@@ -169,11 +169,11 @@ public:
     }
 
     void Union(T x, T y) {
-        T rootX = Find(x);
-        T rootY = Find(y);
+        T ROOTx = Find(x);
+        T ROOTy = Find(y);
 
-        if (rootX != rootY) {
-            parent[rootX] = rootY;
+        if (ROOTx != ROOTy) {
+            parent[ROOTx] = ROOTy;
         }
     }
 
