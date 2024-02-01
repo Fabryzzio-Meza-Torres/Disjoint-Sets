@@ -122,7 +122,9 @@ public:
         return data[DisjointSet<T>::FindPathCompression(x)];
     }
 
-        using DisjointSet<T>::Union; // No es necesario redefinir la función Union
+    void Union(T x, T y) {
+        DisjointSet<T>::Union(x, y);
+    }
 
 
     bool IsConnected(T x, T y)
