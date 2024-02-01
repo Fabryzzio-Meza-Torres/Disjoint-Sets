@@ -21,5 +21,19 @@ int main()
     cout << "Is 0 connected to 2? " << boolalpha << disjointSet.IsConnected(0, 2) << endl;
     cout << "Is 1 connected to 4? " << boolalpha << disjointSet.IsConnected(1, 4) << endl;
 
+    //DisjointSet with array
+    vector<int> values1 = {5,6,7,8,9,10};
+    DisjointSetArray<int> disjointSetArray(values1);
+    //Imprimr DisjointSetArray
+    disjointSetArray.Union(5, 6);
+    disjointSetArray.Union(7, 8);
+    disjointSetArray.Union(9, 10);
+    disjointSetArray.print();
+    cout << "Number of sets: " << disjointSetArray.sets() << endl;
+    cout << "Size of the disjoint set: " << disjointSetArray.size() << endl;
+
+
+    
+
     return 0;
 }

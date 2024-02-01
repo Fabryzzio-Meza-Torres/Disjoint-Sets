@@ -161,4 +161,15 @@ class DisjointSetArray
             return;
         }
         --sets_;}
+    bool IsConnected(int x, int y){
+        return (FindPathCompression(x) == FindPathCompression(y)) ? true : false;}
+    int size(){
+        return elements;}
+    int sets(){
+        return sets_;}
+    void print(){
+        for (int i = 0; i < data.size(); i++)
+        {
+            std::cout << "Data: " << data[i] << " Parent: " << parent[i] << " Rank: " << rank[i] << std::endl;
+        }}
     };
