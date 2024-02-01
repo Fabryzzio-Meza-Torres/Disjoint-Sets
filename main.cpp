@@ -7,7 +7,9 @@ using namespace std;
 int main()
 {
     // Example usage of DisjointSet
-    vector<int> values = {0, 1, 2, 3, 4, 5};
+    vector<int> values = {0, 1, 2, 3, 4, 5};    
+    vector<int> va = {6,7,8,9,10,11};
+
     DisjointSet<int> disjointSet(values);
 
     disjointSet.Union(0, 1);
@@ -22,18 +24,16 @@ int main()
     cout << "Is 1 connected to 4? " << boolalpha << disjointSet.IsConnected(1, 4) << endl;
 
     //DisjointSet with array
-    vector<int> values1 = {5,6,7,8,9,10};
-    DisjointSetArray<int> disjointSetArray(values1);
-    //Imprimr DisjointSetArray
-    disjointSetArray.Union(5, 6);
-    disjointSetArray.Union(7, 8);
-    disjointSetArray.Union(9, 10);
-    disjointSetArray.print();
+    DisjointSet<int> disjointSetArray(va);
+    disjointSetArray.Union(6, 7);
+    disjointSetArray.Union(8, 9);
+    disjointSetArray.Union(10, 11);
+    disjointSetArray.Union(7, 9);
+
     cout << "Number of sets: " << disjointSetArray.sets() << endl;
     cout << "Size of the disjoint set: " << disjointSetArray.size() << endl;
 
-
-    
-
+    cout << "Is 6 connected to 8? " << boolalpha << disjointSetArray.IsConnected(6, 8) << endl;
+    cout << "Is 7 connected to 10? " << boolalpha << disjointSetArray.IsConnected(7, 10) << endl;
     return 0;
 }

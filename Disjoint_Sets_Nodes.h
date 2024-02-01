@@ -89,7 +89,7 @@ public:
 
     bool IsConnected(int x, int y)
     {
-        return (FindPathCompression(x) == FindPathCompression(y)) ? true : false;
+        return FindPathCompression(x) == FindPathCompression(y);
     }
     int size()
     {
@@ -101,75 +101,42 @@ public:
         return sets_;
     }
 };
-//Disjoint set from array
-template<typename T>
-class DisjointSetArray
+
+// Disjoint set from array
+template <typename T>
+class DisjointSetArray : public DisjointSet<T>
 {
-    std::vector<int> parent;
-    std::vector<int> rank;
-    std::vector<T> data;
-    int sets_{};
-    int elements{};
-    public:
-    DisjointSetArray(std::vector<T> values)
+private:
+    T *data;
+    int n;
+
+public:
+    DisjointSetArray(T *arr, int size) : DisjointSet<T>(std::vector<T>(arr, arr + size))
     {
-        parent.resize(values.size());
-        rank.resize(values.size());
-        data = values;
-        for (int i = 0; i < values.size(); i++)
-        {
-            MakeSet(i);
-        }
-        sets_ = values.size();
-        elements = values.size();}
-    void MakeSet(int x){
-        parent[x] = x;
-        rank[x] = 0;
-        sets_++;
-        elements++;}
-    int FindPathCompression(int x){
-        if (x < 0)
-        {
-            throw std::out_of_range("Index out of bounds");
-        }
-        if (parent[x] != x)
-        {
-            parent[x] = FindPathCompression(parent[x]);
-        }
-        return parent[x];}
-    void Union(int x, int y){
-        int rootx = FindPathCompression(x);
-        int rooty = FindPathCompression(y);
-        if (rootx != rooty)
-        {
-            if (rank[rootx] < rank[rooty])
-            {
-                parent[rootx] = rooty;
-            }
-            else if (rank[rootx] > rank[rooty])
-            {
-                parent[rooty] = rootx;
-            }
-            else
-            {
-                parent[rooty] = rootx;
-                rank[rootx]++;
-            }
-        }
-        else
-        {
-            return;
-        }
-        --sets_;}
-    bool IsConnected(int x, int y){
-        return (FindPathCompression(x) == FindPathCompression(y)) ? true : false;}
-    int size(){
-        return elements;}
-    int sets(){
-        return sets_;}
-    void print(){
-        for (int i = 0; i < data.size(); i++)
-        {
-            std::cout << "Data: " << data[i] << " Parent: " << parent[i] << " Rank: " << rank[i] << std::endl;
-        }}
+        data = arr;
+        n = size;
     };
+
+    T FindPathCompression(T x)
+    {
+        return data[DisjointSet<T>::FindPathCompression(x)];
+    }
+
+        using DisjointSet<T>::Union; // No es necesario redefinir la función Union
+
+
+    bool IsConnected(T x, T y)
+    {
+        return DisjointSet<T>::IsConnected(x, y);
+    }
+
+    int size()
+    {
+        return DisjointSet<T>::size();
+    }
+
+    int sets()
+    {
+        return DisjointSet<T>::sets();
+    }
+};
